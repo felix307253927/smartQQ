@@ -1,0 +1,8 @@
+{
+  "name": "nodeQQ",
+  "version": "0.0.1",
+  "devDependencies": {
+    "node-fetch": "^1.6.3",
+    "opn": "^4.0.2"
+  }
+}
