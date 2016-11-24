@@ -2,6 +2,7 @@
   "name": "nodeQQ",
   "version": "0.0.1",
   "devDependencies": {
+    "form-data": "^2.1.2",
     "node-fetch": "^1.6.3",
     "opn": "^4.0.2"
   }
