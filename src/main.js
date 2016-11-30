@@ -146,7 +146,7 @@ class QQ {
     let flag = false;
     msgs.forEach(m => {
       if (m.poll_type === "message") {
-        let msg = '', cur = {}, list = m.value.content.slice(1);
+        let msg = '', cur = {first: true}, list = m.value.content.slice(1);
         list.forEach(_m => {
           msg += _m;
         });
