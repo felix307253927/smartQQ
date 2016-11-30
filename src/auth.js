@@ -143,18 +143,7 @@ export default class Auth {
         ck.forEach(c => Auth.setCookie(c));
       }
       this.getvfwebqq();
-      this.report();
     });
-  }
-
-  report(){
-    fetch("http://cgi.connect.qq.com/report/report?strValue=0&nValue=11202&tag=0&qver=0.0.1&t="+Date.now(),{
-      headers:{
-        Cookie: Auth.getCookieStr(),
-        Referer:"http://w.qq.com/",
-        Host:"cgi.connect.qq.com"
-      }
-    }).then(res=>res.json()).then(console.log)
   }
 
   getvfwebqq() {

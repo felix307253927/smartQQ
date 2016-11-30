@@ -30,7 +30,17 @@ class QQ {
       });
     });
   }
-
+  
+  setStatus() {
+    return fetch(`http://d1.web2.qq.com/channel/change_status2?newstatus=online&clientid=53999199&psessionid=${auth.psessionid}&t=${Date.now()}`, {
+      headers: {
+        Cookie : Auth.getCookieStr(),
+        Referer: "http://d1.web2.qq.com/proxy.html?v=20151105001&callback=1&id=2",
+        Host   : "d1.web2.qq.com"
+      }
+    }).then(res => res.json())
+  }
+  
   getInfo() {
     let url = "http://s.web2.qq.com/api/get_self_info2?t=" + Date.now();
     fetch(url, {
@@ -46,7 +56,7 @@ class QQ {
 //      console.log(data)
     })
   }
-
+  
   getFrieds() {
     return fetch("http://s.web2.qq.com/api/get_user_friends2", {
       method : 'POST',
@@ -72,7 +82,7 @@ class QQ {
       }
     })
   }
-
+  
   poll() {
     fetch("https://d1.web2.qq.com/channel/poll2", {
       method : 'POST',
@@ -109,7 +119,7 @@ class QQ {
       this.poll();
     })
   }
-
+  
   sendMessage(uid, message, font) {
     font = font || ["font", {"name": "宋体", "size": 10, "style": [0, 0, 0], "color": "000000"}];
     return fetch("https://d1.web2.qq.com/channel/send_buddy_msg2", {
@@ -131,13 +141,16 @@ class QQ {
       }))
     }).then(res => res.json());
   }
-
+  
   dealMessage(msgs, callback) {
     let flag = false;
     msgs.forEach(m => {
       if (m.poll_type === "message") {
-        let msg = m.value.content[1], cur = {};
-        flag    = true;
+        let msg = '', cur = {}, list = m.value.content.slice(1);
+        list.forEach(_m => {
+          msg += _m;
+        });
+        flag = true;
         if (this.chatMap.has(m.value.from_uin)) {
           cur       = this.chatMap.get(m.value.from_uin);
           cur.first = false;
@@ -154,7 +167,6 @@ class QQ {
         let send = (msg) => {
           this.sendMessage(m.value.from_uin, '豆豆：' + msg, m.value.content[0]).then(data => {
             data.text = msg;
-            console.log(0, data);
             callback && callback(data);
           }).catch(err => {
             console.error('error', err);
@@ -162,32 +174,32 @@ class QQ {
           });
         };
         if (cur.first) {
-          msg = `${cur.markname||"你好"},我是主人的小宠物豆豆，我有什么可以帮你的? 你可以说：\n  豆豆别说话  --我就不说话了\n  豆豆醒醒     --我就回来了`;
+          msg = `${cur.markname || "你好"},我是主人的小宠物豆豆，我有什么可以帮你的? 你可以说：\n  豆豆别说话  --我就不说话了\n  豆豆醒醒     --我就回来了`;
           send(msg);
         } else {
-          if (msg.trim() == "豆豆醒醒") {
+          if (msg.indexOf("豆豆醒醒") > -1) {
             send("哎哎，我来了\n  (づ｡◕‿‿◕｡)づ");
             return cur.stop = false;
-          } else if (cur.stop || msg.trim() == "豆豆别说话") {
+          } else if (cur.stop || msg.indexOf("豆豆别说话") > -1) {
             cur.stop ? (callback && callback({text: msg})) : send("(๑•́ ₃ •̀๑)  我不说了");
             return cur.stop = true;
           }
           robot.getReply(msg).then(data => {
             if (data.code >= 100000) {
-              if(data.text != "这是问号"){
+              if (data.text != "这是问号") {
                 msg = data.text;
-                if(data.url){
+                if (data.url) {
                   msg += "\n详情：" + data.url;
                 }
-                if(data.list){
+                if (data.list) {
                   let info = "";
-                  for(let i=0,d;i<2;i++){
+                  for (let i = 0, d; i < 2; i++) {
                     d = data.list[i];
-                    info += `\n ${i+1}. 详情：${d.info}\n 地址：${d.detailurl}`
+                    info += `\n ${i + 1}. 详情：${d.info}\n 地址：${d.detailurl}`
                   }
                   msg += info;
                 }
-              } else{
+              } else {
                 msg = '主人没告诉我这是什么 \n(๑•́ ₃ •̀๑)';
               }
             } else {
@@ -201,7 +213,7 @@ class QQ {
     });
     !flag && callback && callback();
   }
-
+  
   hash(uin, ptvfwebqq) {
     uin += "";
     let ptb = [];
@@ -222,10 +234,10 @@ class QQ {
       else
         result[i] = uinByte[i >> 1];
     }
-
+    
     let hex = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'];
     let buf = "";
-
+    
     for (let i = 0; i < result.length; i++) {
       buf += (hex[(result[i] >> 4) & 0xF]);
       buf += (hex[result[i] & 0xF]);
