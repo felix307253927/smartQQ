@@ -177,10 +177,10 @@ class QQ {
           msg = `${cur.markname || "你好"},我是主人的小宠物豆豆，我有什么可以帮你的? 你可以说：\n  豆豆别说话  --我就不说话了\n  豆豆醒醒     --我就回来了`;
           send(msg);
         } else {
-          if (msg.indexOf("豆豆醒醒") > -1) {
+          if (/豆豆.*(醒|起)/.test(msg)) {
             send("哎哎，我来了\n  (づ｡◕‿‿◕｡)づ");
             return cur.stop = false;
-          } else if (cur.stop || msg.indexOf("豆豆别说话") > -1) {
+          } else if (cur.stop || /豆豆.*(别说话|闭嘴|安静|睡觉)/.test(msg)) {
             cur.stop ? (callback && callback({text: msg})) : send("(๑•́ ₃ •̀๑)  我不说了");
             return cur.stop = true;
           }
