@@ -6,8 +6,7 @@ import fetch from 'node-fetch';
 
 export default class Robot{
   constructor(){
-   this.key = "2e0e9061206244f9b4876c641908eb0b";   //QQ
-    // this.key = "61dbcca4c9fd4f00850198f5ef835bb0";     //微信
+   this.key = "www.tuling123.com";   //QQ 申请个图灵机器人
   }
 
   getReply(text){
