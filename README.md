@@ -5,6 +5,9 @@
 ```
   安装依赖包
   npm install
+  
+  运行项目
+  npm start  
    
 ```
 
@@ -18,5 +21,5 @@
 问题:
 1. 启动后 控制台打印  retcode 103  要先登录[smartQQ](http://w.qq.com/)
   
-
+  
 

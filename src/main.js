@@ -9,7 +9,7 @@ import Robot from './robot';
 let auth  = new Auth();
 let robot = new Robot();
 
-class QQ {
+export default class QQ {
   constructor() {
     let t           = (new Date()).getTime();
     t               = (t - t % 1000) / 1000;
@@ -245,6 +245,3 @@ class QQ {
     return buf;
   }
 }
-
-
-new QQ();
